@@ -3,9 +3,11 @@ import { SWRConfig } from "swr";
 import { appWithTranslation } from "next-i18next";
 import Head from "next/head";
 
-import "styles/globals.css";
+import "styles/fonts.css";
 import "styles/theme.css";
-import "styles/manrope.css";
+import "styles/globals.css";
+import "styles/user.css";
+
 import nextI18nextConfig from "../../next-i18next.config";
 
 import { ColorProvider } from "utils/contexts/color";
