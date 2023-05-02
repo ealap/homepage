@@ -45,10 +45,3 @@ body {
 .container:nth-child(1) > :nth-child(1) > :nth-child(5) {
   order: 5;
 }
-
-li img {
-  height: auto;
-  width: auto;
-  max-height: 32px;
-  max-width: 100%;
-}
