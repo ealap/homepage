@@ -114,7 +114,8 @@
     "plex": {
         "streams": "Aktīvās straumes",
         "movies": "Filmas",
-        "tv": "TV pārraides"
+        "tv": "TV pārraides",
+        "albums": "Albums"
     },
     "sabnzbd": {
         "rate": "Rate",
@@ -577,5 +578,9 @@
         "recordings": "Recordings",
         "scheduled": "Scheduled",
         "passes": "Passes"
+    },
+    "whatsupdocker": {
+        "monitoring": "Monitoring",
+        "updates": "Updates"
     }
 }

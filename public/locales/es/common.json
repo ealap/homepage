@@ -228,7 +228,8 @@
     "plex": {
         "streams": "Transmisiones activas",
         "movies": "Películas",
-        "tv": "Series"
+        "tv": "Series",
+        "albums": "Álbumes"
     },
     "glances": {
         "cpu": "Procesador",
@@ -577,5 +578,9 @@
         "recordings": "Grabaciones",
         "scheduled": "Programado",
         "passes": "Pases"
+    },
+    "whatsupdocker": {
+        "monitoring": "Supervisión",
+        "updates": "Actualizaciones"
     }
 }

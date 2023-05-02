@@ -228,7 +228,8 @@
     "plex": {
         "streams": "活动流",
         "movies": "电影",
-        "tv": "电视节目"
+        "tv": "电视节目",
+        "albums": "专辑"
     },
     "glances": {
         "cpu": "处理器",
@@ -541,9 +542,9 @@
         "nodes": "节点"
     },
     "prometheus": {
-        "targets_up": "Targets Up",
-        "targets_down": "Targets Down",
-        "targets_total": "Total Targets"
+        "targets_up": "目标离线",
+        "targets_down": "目标在线",
+        "targets_total": "总目标"
     },
     "minecraft": {
         "players": "播放中",
@@ -569,13 +570,17 @@
         "switches_on": "Switches On"
     },
     "freshrss": {
-        "subscriptions": "Subscriptions",
-        "unread": "Unread"
+        "subscriptions": "订阅",
+        "unread": "未读"
     },
     "channelsdvrserver": {
-        "shows": "Shows",
-        "recordings": "Recordings",
-        "scheduled": "Scheduled",
+        "shows": "节目",
+        "recordings": "录像",
+        "scheduled": "已计划的",
         "passes": "Passes"
+    },
+    "whatsupdocker": {
+        "monitoring": "Monitoring",
+        "updates": "Updates"
     }
 }

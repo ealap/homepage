@@ -105,7 +105,8 @@
     "plex": {
         "streams": "Aktivní streamy",
         "movies": "Filmy",
-        "tv": "Seriály"
+        "tv": "Seriály",
+        "albums": "Albums"
     },
     "sabnzbd": {
         "rate": "Rychlost",
@@ -577,5 +578,9 @@
         "recordings": "Recordings",
         "scheduled": "Scheduled",
         "passes": "Passes"
+    },
+    "whatsupdocker": {
+        "monitoring": "Monitoring",
+        "updates": "Updates"
     }
 }

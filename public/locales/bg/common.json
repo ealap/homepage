@@ -99,7 +99,8 @@
     "plex": {
         "streams": "Активни Потоци",
         "movies": "Филми",
-        "tv": "Сериали"
+        "tv": "Сериали",
+        "albums": "Albums"
     },
     "transmission": {
         "download": "Сваляне",
@@ -577,5 +578,9 @@
         "recordings": "Recordings",
         "scheduled": "Scheduled",
         "passes": "Passes"
+    },
+    "whatsupdocker": {
+        "monitoring": "Monitoring",
+        "updates": "Updates"
     }
 }
