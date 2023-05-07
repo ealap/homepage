@@ -15,7 +15,7 @@ const logger = createLogger(proxyName);
 
 async function getWidget(req) {
   const { group, service, type } = req.query;
-  
+
   let widget = null;
   if (type === "unifi_console") { // info widget
     const index = req.query?.query ? JSON.parse(req.query.query).index : undefined;
@@ -30,7 +30,7 @@ async function getWidget(req) {
       logger.debug("Invalid or missing service '%s' or group '%s'", service, group);
       return null;
     }
-  
+
     widget = await getServiceWidget(group, service);
 
     if (!widget) {
@@ -47,7 +47,10 @@ async function login(widget, csrfToken) {
   const api = widgets?.[widget.type]?.api?.replace("{prefix}", ""); // no prefix for login url
   const loginUrl = new URL(formatApiCall(api, { endpoint, ...widget }));
   const loginBody = { username: widget.username, password: widget.password, remember: true };
-  const headers = { "Content-Type": "application/json" };
+  const headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Content-Type-Options": "nosniff"
+  };
   if (csrfToken) {
     headers["X-CSRF-TOKEN"] = csrfToken;
   }
@@ -93,9 +96,9 @@ export default async function unifiProxyHandler(req, res) {
   setCookieHeader(url, params);
 
   [status, contentType, data, responseHeaders] = await httpProxy(url, params);
-  
+
   if (status === 401) {
-    logger.debug("Unifi isn't logged in or rejected the reqeust, attempting login.");  
+    logger.debug("Unifi isn't logged in or rejected the reqeust, attempting login.");
     if (responseHeaders?.["x-csrf-token"]) {
       csrfToken = responseHeaders["x-csrf-token"];
     }
@@ -124,6 +127,9 @@ export default async function unifiProxyHandler(req, res) {
     return res.status(status).json({error: {message: `HTTP Error ${status}`, url, data}});
   }
 
-  if (contentType) res.setHeader("Content-Type", contentType);
+  if (contentType) {
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+  }
   return res.status(status).send(data);
 }

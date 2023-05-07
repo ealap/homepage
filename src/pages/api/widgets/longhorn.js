@@ -74,7 +74,10 @@ export default async function handler(req, res) {
     logger.error("HTTP %d getting data from Longhorn API. Data: %s", status, data);
   }
 
-  if (contentType) res.setHeader("Content-Type", contentType);
+  if (contentType) {
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+  }
 
   const nodes = parseLonghornData(data);
 

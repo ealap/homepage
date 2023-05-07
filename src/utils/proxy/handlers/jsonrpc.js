@@ -10,8 +10,9 @@ const logger = createLogger("jsonrpcProxyHandler");
 
 export async function sendJsonRpcRequest(url, method, params, username, password) {
   const headers = {
-    "content-type": "application/json",
-    "accept": "application/json"
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Content-Type-Options": "nosniff",
+    "Accept": "application/json"
   }
 
   if (username && password) {
@@ -44,16 +45,16 @@ export async function sendJsonRpcRequest(url, method, params, username, password
 
   try {
     const response = await client.request(method, params);
-    return [200, "application/json", JSON.stringify(response)];
+    return [200, "application/json; charset=utf-8", JSON.stringify(response)];
   }
   catch (e) {
     if (e instanceof JSONRPCErrorException) {
       logger.debug("Error calling JSONPRC endpoint: %s.  %s", url, e.message);
-      return [200, "application/json", JSON.stringify({result: null, error: {code: e.code, message: e.message}})];
+      return [200, "application/json; charset=utf-8", JSON.stringify({result: null, error: {code: e.code, message: e.message}})];
     }
 
     logger.warn("Error calling JSONPRC endpoint: %s.  %s", url, e);
-    return [500, "application/json", JSON.stringify({result: null, error: {code: 2, message: e.toString()}})];
+    return [500, "application/json; charset=utf-8", JSON.stringify({result: null, error: {code: 2, message: e.toString()}})];
   }
 }
 

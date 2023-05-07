@@ -29,7 +29,7 @@ async function retrieveFromGlancesAPI(privateWidgetOptions, endpoint) {
     logger.error(errorMessage);
     throw new Error(errorMessage);
   }
-  
+
   if (status !== 200) {
     errorMessage = `HTTP ${status} getting data from glances API. Data: ${data.toString()}`
     logger.error(errorMessage);
@@ -50,9 +50,9 @@ export default async function handler(req, res) {
     const data = {
       quicklook: quicklookData
     }
-    
+
     data.uptime = await retrieveFromGlancesAPI(privateWidgetOptions, "uptime");
-    
+
     data.sensors = await retrieveFromGlancesAPI(privateWidgetOptions, "sensors");
 
     return res.status(200).send(data);

@@ -35,7 +35,7 @@ function handleRequest(requestor, url, params) {
 
       response.on("end", () => {
         addCookieToJar(url, response.headers);
-        resolve([response.statusCode, response.headers["content-type"], Buffer.concat(data), response.headers]);
+        resolve([response.statusCode, response.headers["Content-Type"], Buffer.concat(data), response.headers]);
       });
     });
 
@@ -83,6 +83,6 @@ export async function httpProxy(url, params = {}) {
   catch (err) {
     logger.error("Error calling %s//%s%s...", constructedUrl.protocol, constructedUrl.hostname, constructedUrl.pathname);
     logger.error(err);
-    return [500, "application/json", { error: {message: err?.message ?? "Unknown error", url, rawError: err} }, null];
+    return [500, "application/json; charset=utf-8", { error: {message: err?.message ?? "Unknown error", url, rawError: err} }, null];
   }
 }

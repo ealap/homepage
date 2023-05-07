@@ -15,7 +15,7 @@ async function login(widget, service) {
   const api = widgets?.[widget.type]?.api
   const loginUrl = new URL(formatApiCall(api, { endpoint, ...widget }));
   const loginBody = { username: widget.username, password: widget.password };
-  const headers = { "Content-Type": "application/json" };
+  const headers = { "Content-Type": "application/json; charset=utf-8" };
   // eslint-disable-next-line no-unused-vars
   const [status, contentType, data, responseHeaders] = await httpProxy(loginUrl, {
     method: "POST",
@@ -25,7 +25,7 @@ async function login(widget, service) {
 
   try {
     const { access_token: accessToken, expires_in: expiresIn } = JSON.parse(data.toString());
-  
+
     cache.put(`${sessionTokenCacheKey}.${service}`, accessToken, (expiresIn * 1000) - 5 * 60 * 1000); // expiresIn (s) - 5m
     return { accessToken };
   } catch (e) {
@@ -38,7 +38,8 @@ async function login(widget, service) {
 async function apiCall(widget, endpoint, service) {
   const key = `${sessionTokenCacheKey}.${service}`;
   const headers = {
-    "content-type": "application/json",
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Content-Type-Options": "nosniff",
     "Authorization": `Bearer ${cache.get(key)}`,
   }
 

@@ -21,9 +21,12 @@ export default async function photoprismProxyHandler(req, res) {
   }
 
   const url = new URL(formatApiCall("{url}/api/v1/session", { ...widget }));
-  const params = { 
-    method: "POST", 
-    headers: { "Content-Type": "application/json" }, 
+  const params = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-Content-Type-Options": "nosniff",
+    },
     body: null
   };
 
@@ -42,7 +45,10 @@ export default async function photoprismProxyHandler(req, res) {
   }
 
   const json = JSON.parse(data.toString())
-  
-  if (contentType) res.setHeader("Content-Type", contentType);
+
+  if (contentType) {
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+  }
   return res.status(200).send(json?.config?.count);
 }

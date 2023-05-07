@@ -21,7 +21,8 @@ export default async function credentialedProxyHandler(req, res, map) {
       const url = new URL(formatApiCall(widgets[widget.type].api, { endpoint, ...widget }));
 
       const headers = {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json; charset=utf-8",
+        "X-Content-Type-Options": "nosniff",
       };
 
       if (widget.type === "coinmarketcap") {
@@ -42,6 +43,7 @@ export default async function credentialedProxyHandler(req, res, map) {
         headers.Authorization = `PVEAPIToken=${widget.username}=${widget.password}`;
       } else if (widget.type === "proxmoxbackupserver") {
         delete headers["Content-Type"];
+        delete headers["X-Content-Type-Options"];
         headers.Authorization = `PBSAPIToken=${widget.username}:${widget.password}`;
       } else if (widget.type === "autobrr") {
         headers["X-API-Token"] = `${widget.key}`;
@@ -79,7 +81,7 @@ export default async function credentialedProxyHandler(req, res, map) {
       if (status >= 400) {
         logger.error("HTTP Error %d calling %s", status, url.toString());
       }
-      
+
       if (status === 200) {
         if (!validateWidgetData(widget, endpoint, resultData)) {
           return res.status(500).json({error: {message: "Invalid data", url: sanitizeErrorURL(url), data: resultData}});
@@ -87,7 +89,10 @@ export default async function credentialedProxyHandler(req, res, map) {
         if (map) resultData = map(resultData);
       }
 
-      if (contentType) res.setHeader("Content-Type", contentType);
+      if (contentType) {
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("X-Content-Type-Options", "nosniff");
+      }
       return res.status(status).send(resultData);
     }
   }

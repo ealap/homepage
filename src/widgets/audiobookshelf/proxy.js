@@ -9,7 +9,8 @@ const logger = createLogger(proxyName);
 
 async function retrieveFromAPI(url, key) {
   const headers = {
-    "content-type": "application/json",
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Content-Type-Options": "nosniff",
     "Authorization": `Bearer ${key}`
   };
 
@@ -55,7 +56,7 @@ export default async function audiobookshelfProxyHandler(req, res) {
         stats
       };
     }));
-  
+
     return res.status(200).send(libraryStats);
   } catch (e) {
     logger.error(e.message);

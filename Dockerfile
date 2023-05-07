@@ -1,14 +1,15 @@
 # syntax = docker/dockerfile:latest
 
 # Install dependencies only when needed
-FROM docker.io/node:18-alpine AS deps
+FROM docker.io/node:20-alpine AS deps
 
 WORKDIR /app
 
 COPY --link package.json pnpm-lock.yaml* ./
 
 SHELL ["/bin/ash", "-xeo", "pipefail", "-c"]
-RUN apk add --no-cache libc6-compat \
+RUN apk update && apk upgrade \
+ && apk add --no-cache libc6-compat \
  && apk add --no-cache --virtual .gyp python3 make g++ \
  && npm install -g pnpm
 
@@ -28,7 +29,8 @@ COPY --link --from=deps /app/node_modules ./node_modules/
 COPY . .
 
 SHELL ["/bin/ash", "-xeo", "pipefail", "-c"]
-RUN npm run telemetry \
+RUN npm install --global "npm@latest" \
+ && npm run telemetry \
  && mkdir config \
  && NEXT_PUBLIC_BUILDTIME=$BUILDTIME NEXT_PUBLIC_VERSION=$VERSION NEXT_PUBLIC_REVISION=$REVISION npm run build
 
@@ -54,7 +56,8 @@ COPY --link --from=builder --chown=1000:1000 /app/.next/standalone ./
 COPY --link --from=builder --chown=1000:1000 /app/.next/static/ ./.next/static/
 COPY --link --chmod=755 docker-entrypoint.sh /usr/local/bin/
 
-RUN apk add --no-cache su-exec
+RUN apk update && apk upgrade \
+ && apk add --no-cache su-exec
 
 ENV PORT 3000
 EXPOSE $PORT

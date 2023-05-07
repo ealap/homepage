@@ -18,6 +18,7 @@ export async function getServerSideProps({ res }) {
 </browserconfig>`;
 
   res.setHeader("Content-Type", "text/xml");
+  res.setHeader("X-Content-Type-Options", "nosniff");
   res.write(xml);
   res.end();
 

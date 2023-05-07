@@ -38,11 +38,11 @@ export default async function genericProxyHandler(req, res, map) {
       const [status, contentType, data] = await httpProxy(url, params);
 
       let resultData = data;
-      
+
       if (resultData.error?.url) {
         resultData.error.url = sanitizeErrorURL(url);
       }
-      
+
       if (status === 200) {
         if (!validateWidgetData(widget, endpoint, resultData)) {
           return res.status(status).json({error: {message: "Invalid data", url: sanitizeErrorURL(url), data: resultData}});
@@ -50,7 +50,10 @@ export default async function genericProxyHandler(req, res, map) {
         if (map) resultData = map(resultData);
       }
 
-      if (contentType) res.setHeader("Content-Type", contentType);
+      if (contentType) {
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("X-Content-Type-Options", "nosniff");
+      }
 
       if (status === 204 || status === 304) {
         return res.status(status).end();

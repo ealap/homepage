@@ -28,7 +28,8 @@ export async function getServerSideProps({ res }) {
     display: "standalone",
   };
 
-  res.setHeader("Content-Type", "application/manifest+json");
+  res.setHeader("Content-Type", "application/manifest+json; charset=utf-8");
+  res.setHeader("X-Content-Type-Options", "nosniff");
   res.write(JSON.stringify(manifest));
   res.end();
 

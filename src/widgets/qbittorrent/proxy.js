@@ -11,7 +11,10 @@ async function login(widget) {
   const loginBody = `username=${encodeURI(widget.username)}&password=${encodeURI(widget.password)}`;
   const loginParams = {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "X-Content-Type-Options": "nosniff",
+    },
     body: loginBody,
   }
 
@@ -59,6 +62,9 @@ export default async function qbittorrentProxyHandler(req, res) {
     logger.error("HTTP %d getting data from qBittorrent.  Data: %s", status, data);
   }
 
-  if (contentType) res.setHeader("Content-Type", contentType);
+  if (contentType) {
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+  }
   return res.status(status).send(data);
 }

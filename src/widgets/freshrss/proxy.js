@@ -14,7 +14,10 @@ async function login(widget, service) {
   const endpoint = "accounts/ClientLogin";
   const api = widgets?.[widget.type]?.api
   const loginUrl = new URL(formatApiCall(api, { endpoint, ...widget }));
-  const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+  const headers = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    "X-Content-Type-Options": "nosniff",
+  };
 
   const [, , data,] = await httpProxy(loginUrl, {
     method: "POST",

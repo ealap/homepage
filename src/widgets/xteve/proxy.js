@@ -58,6 +58,9 @@ export default async function xteveProxyHandler(req, res) {
     return res.status(status).json({error: {message: `HTTP Error ${status}`, url, data}});
   }
 
-  if (contentType) res.setHeader("Content-Type", contentType);
+  if (contentType) {
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+  }
   return res.status(status).send(data);
 }

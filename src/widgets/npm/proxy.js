@@ -15,7 +15,8 @@ async function login(loginUrl, username, password, service) {
     method: "POST",
     body: JSON.stringify({ identity: username, secret: password }),
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-Content-Type-Options": "nosniff",
     },
   });
 
@@ -24,7 +25,7 @@ async function login(loginUrl, username, password, service) {
 
   try {
     data = JSON.parse(Buffer.from(authResponse[2]).toString());
-    
+
     if (status === 200) {
       const expiration = new Date(data.expires) - Date.now();
       cache.put(`${tokenCacheKey}.${service}`, data.token, expiration - (5 * 60 * 1000)); // expiration -5 minutes
@@ -52,7 +53,7 @@ export default async function npmProxyHandler(req, res) {
       let status;
       let contentType;
       let data;
-      
+
       let token = cache.get(`${tokenCacheKey}.${service}`);
       if (!token) {
         [status, token] = await login(loginUrl, widget.username, widget.password, service);
@@ -65,7 +66,8 @@ export default async function npmProxyHandler(req, res) {
       [status, contentType, data] = await httpProxy(url, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Content-Type-Options": "nosniff",
           Authorization: `Bearer ${token}`,
         },
       });
@@ -84,7 +86,8 @@ export default async function npmProxyHandler(req, res) {
         [status, contentType, data] = await httpProxy(url, {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json; charset=utf-8",
+            "X-Content-Type-Options": "nosniff",
             Authorization: `Bearer ${token}`,
           },
         });

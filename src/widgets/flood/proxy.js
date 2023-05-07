@@ -9,9 +9,12 @@ async function login(widget) {
   logger.debug("flood is rejecting the request, logging in.");
   const loginUrl = new URL(`${widget.url}/api/auth/authenticate`).toString();
 
-  const loginParams = { 
-    method: "POST", 
-    headers: { "Content-Type": "application/json" }, 
+  const loginParams = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-Content-Type-Options": "nosniff",
+    },
     body: null
   };
 
@@ -61,6 +64,9 @@ export default async function floodProxyHandler(req, res) {
     logger.error("HTTP %d getting data from flood.  Data: %s", status, data);
   }
 
-  if (contentType) res.setHeader("Content-Type", contentType);
+  if (contentType) {
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+  }
   return res.status(status).send(data);
 }

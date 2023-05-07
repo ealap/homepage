@@ -33,7 +33,7 @@ async function login(loginUrl) {
     let message = "Authentication failed.";
     if (json?.error?.code >= 403) message += " 2FA enabled.";
     logger.warn("Unable to login.  Code: %d", json?.error?.code);
-    return [401, "application/json", JSON.stringify({ code: json?.error?.code, message })];
+    return [401, "application/json; charset=utf-8", JSON.stringify({ code: json?.error?.code, message })];
   }
 
   return [status, contentType, data];
@@ -171,6 +171,9 @@ export default async function synologyProxyHandler(req, res) {
     data = toError(url, json);
     status = 500;
   }
-  if (contentType) res.setHeader("Content-Type", contentType);
+  if (contentType) {
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+  }
   return res.status(status).send(data);
 }

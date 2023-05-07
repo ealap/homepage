@@ -34,7 +34,7 @@ export default async function tdarrProxyHandler(req, res) {
       },
     }),
     headers: {
-      "content-type": "application/json",
+      "Content-Type": "application/json; charset=utf-8",
     },
   });
 
@@ -43,6 +43,9 @@ export default async function tdarrProxyHandler(req, res) {
     return res.status(500).send({error: {message:"Error getting data from Tdarr", url, data}});
   }
 
-  if (contentType) res.setHeader("Content-Type", contentType);
+  if (contentType) {
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+  }
   return res.status(status).send(data);
 }

@@ -22,8 +22,8 @@ export default async function watchtowerProxyHandler(req, res) {
     return res.status(400).json({ error: "Invalid proxy service type" });
   }
 
-  const url = new URL(formatApiCall(widgets[widget.type].api, { endpoint, ...widget }));  
-  
+  const url = new URL(formatApiCall(widgets[widget.type].api, { endpoint, ...widget }));
+
   const [status, contentType, data] = await httpProxy(url, {
     method: "GET",
     headers: {
@@ -38,12 +38,15 @@ export default async function watchtowerProxyHandler(req, res) {
 
   const cleanData = data.toString().split("\n").filter(s => s.startsWith("watchtower"));
   const jsonRes = {}
-  
-  cleanData.map(e => e.split(" ")).forEach(strArray => { 
+
+  cleanData.map(e => e.split(" ")).forEach(strArray => {
     const [key, value] = strArray
     jsonRes[key] = value
   });
 
-  if (contentType) res.setHeader("Content-Type", contentType);
+  if (contentType) {
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+  }
   return res.status(status).send(jsonRes);
 }

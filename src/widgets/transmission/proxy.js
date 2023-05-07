@@ -28,7 +28,7 @@ export default async function transmissionProxyHandler(req, res) {
   let headers = cache.get(`${headerCacheKey}.${service}`);
   if (!headers) {
     headers = {
-      "content-type": "application/json",
+      "Content-Type": "application/json; charset=utf-8",
     }
     cache.put(`${headerCacheKey}.${service}`, headers);
   }
@@ -73,6 +73,9 @@ export default async function transmissionProxyHandler(req, res) {
     return res.status(500).send({error: {message:"Error getting data from Transmission", url, data}});
   }
 
-  if (contentType) res.setHeader("Content-Type", contentType);
+  if (contentType) {
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+  }
   return res.status(status).send(data);
 }

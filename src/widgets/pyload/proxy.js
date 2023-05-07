@@ -20,7 +20,8 @@ async function fetchFromPyloadAPI(url, sessionId, params, service) {
       : `session=${sessionId}`,
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      "Content-Type": "application/x-www-form-urlencoded",
+      "X-Content-Type-Options": "nosniff",
     },
   };
 
@@ -45,7 +46,7 @@ async function fetchFromPyloadAPI(url, sessionId, params, service) {
 
 async function login(loginUrl, service, username, password = '') {
   const [status, sessionId, responseHeaders] = await fetchFromPyloadAPI(loginUrl, null, { username, password }, service);
-  
+
   // this API actually returns status 200 even on login failure
   if (status !== 200 || sessionId === false) {
     logger.error(`HTTP ${status} logging into Pyload API, returned: ${JSON.stringify(sessionId)}`);

@@ -26,7 +26,8 @@ async function login(loginUrl, username, password, controllerVersionMajor) {
     method: "POST",
     body: JSON.stringify(params),
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-Content-Type-Options": "nosniff",
     },
   });
 
@@ -48,7 +49,8 @@ export default async function omadaProxyHandler(req, res) {
 
       let [status, contentType, data] = await httpProxy(controllerInfoURL, {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json; charset=utf-8",
+            "X-Content-Type-Options": "nosniff",
           },
       });
 
@@ -88,7 +90,7 @@ export default async function omadaProxyHandler(req, res) {
         default:
           break;
       }
-      
+
       const [loginStatus, loginResponseData] = await login(loginUrl, widget.username, widget.password, controllerVersionMajor);
 
       if (loginStatus !== 200 || loginResponseData.errorCode > 0) {
@@ -96,7 +98,7 @@ export default async function omadaProxyHandler(req, res) {
       }
 
       const { token } = loginResponseData.result;
-      
+
       let sitesUrl;
       let body = {};
       let params = { token };
@@ -115,7 +117,7 @@ export default async function omadaProxyHandler(req, res) {
           method = "POST";
           break;
         case 4:
-          sitesUrl = `${url}/api/v2/sites?token=${token}&currentPage=1&currentPageSize=1000`;          
+          sitesUrl = `${url}/api/v2/sites?token=${token}&currentPage=1&currentPageSize=1000`;
           break;
         case 5:
           sitesUrl = `${url}/${cId}/api/v2/sites?token=${token}&currentPage=1&currentPageSize=1000`;
@@ -123,7 +125,7 @@ export default async function omadaProxyHandler(req, res) {
         default:
           break;
       }
-      
+
       [status, contentType, data] = await httpProxy(sitesUrl, {
         method,
         params,
@@ -138,7 +140,7 @@ export default async function omadaProxyHandler(req, res) {
         return res.status(status).json({error: {message: "Error getting sites list", url, data: sitesResponseData}});
       }
 
-      const site = (controllerVersionMajor === 3) ? 
+      const site = (controllerVersionMajor === 3) ?
         sitesResponseData.result.siteList.find(s => s.name === widget.site):
         sitesResponseData.result.data.find(s => s.name === widget.site);
 
@@ -165,7 +167,10 @@ export default async function omadaProxyHandler(req, res) {
             userName: widget.username
           }
         };
-        headers = { "Content-Type": "application/json" };
+        headers = {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Content-Type-Options": "nosniff",
+        };
         params = { token };
 
         [status, contentType, data] = await httpProxy(switchUrl, {
@@ -180,7 +185,7 @@ export default async function omadaProxyHandler(req, res) {
           logger.error(`HTTP ${status} getting sites list: ${data}`);
           return res.status(status).json({error: {message: "Error switching site", url: switchUrl, data}});
         }
-        
+
         const statsUrl = `${url}/web/v1/controller?getGlobalStat=&token=${token}`;
         [status, contentType, data] = await httpProxy(statsUrl, {
           method,
@@ -202,7 +207,7 @@ export default async function omadaProxyHandler(req, res) {
         alerts = siteResponseData.result.alerts;
       } else if (controllerVersionMajor === 4 || controllerVersionMajor === 5) {
         const siteName = (controllerVersionMajor === 5) ? site.id : site.key;
-        const siteStatsUrl = (controllerVersionMajor === 4) ? 
+        const siteStatsUrl = (controllerVersionMajor === 4) ?
           `${url}/api/v2/sites/${siteName}/dashboard/overviewDiagram?token=${token}&currentPage=1&currentPageSize=1000` :
           `${url}/${cId}/api/v2/sites/${siteName}/dashboard/overviewDiagram?token=${token}&currentPage=1&currentPageSize=1000`;
 
@@ -213,13 +218,13 @@ export default async function omadaProxyHandler(req, res) {
         });
 
         siteResponseData = JSON.parse(data);
-        
+
         if (status !== 200 || siteResponseData.errorCode > 0) {
           logger.debug(`HTTP ${status} getting stats for site ${widget.site} with message ${siteResponseData.msg}`);
           return res.status(500).send(data);
         }
 
-        const alertUrl = (controllerVersionMajor === 4) ? 
+        const alertUrl = (controllerVersionMajor === 4) ?
           `${url}/api/v2/sites/${siteName}/alerts/num?token=${token}&currentPage=1&currentPageSize=1000` :
           `${url}/${cId}/api/v2/sites/${siteName}/alerts/num?token=${token}&currentPage=1&currentPageSize=1000`;
 
