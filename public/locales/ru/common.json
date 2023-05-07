@@ -513,7 +513,9 @@
         "cpuload": "Загрузка процессора",
         "memoryusage": "Использование памяти",
         "freespace": "Свободное место",
-        "activeusers": "Активные пользователи"
+        "activeusers": "Активные пользователи",
+        "numfiles": "Files",
+        "numshares": "Shared Items"
     },
     "kopia": {
         "status": "Статус",
@@ -582,5 +584,19 @@
     "whatsupdocker": {
         "monitoring": "Мониторинг",
         "updates": "Обновления"
+    },
+    "tailscale": {
+        "address": "Address",
+        "expires": "Expires",
+        "never": "Never",
+        "last_seen": "Last Seen",
+        "now": "Now",
+        "years": "{{number}}y",
+        "weeks": "{{number}}w",
+        "days": "{{number}}d",
+        "hours": "{{number}}h",
+        "minutes": "{{number}}m",
+        "seconds": "{{number}}s",
+        "ago": "{{value}} Ago"
     }
 }
