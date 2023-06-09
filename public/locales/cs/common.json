@@ -133,18 +133,22 @@
     "sonarr": {
         "wanted": "Hledané",
         "queued": "Ve frontě",
-        "series": "Seriály"
+        "series": "Seriály",
+        "unknown": "Unknown",
+        "queue": "Queue"
     },
     "radarr": {
         "wanted": "Hledané",
         "missing": "Chybějící",
         "queued": "Ve frontě",
-        "movies": "Filmy"
+        "movies": "Filmy",
+        "queue": "Queue",
+        "unknown": "Unknown"
     },
     "lidarr": {
         "wanted": "Hledané",
         "queued": "Ve frontě",
-        "albums": "Alba"
+        "artists": "Artists"
     },
     "readarr": {
         "wanted": "Hledané",

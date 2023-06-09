@@ -66,13 +66,17 @@
     "sonarr": {
         "wanted": "Buscando",
         "queued": "En cola",
-        "series": "Series"
+        "series": "Series",
+        "queue": "Poner a la cola",
+        "unknown": "Desconocido"
     },
     "radarr": {
         "wanted": "Buscando",
         "queued": "En cola",
         "movies": "Películas",
-        "missing": "Faltan"
+        "missing": "Faltan",
+        "queue": "Poner a la cola",
+        "unknown": "Desconocido"
     },
     "readarr": {
         "wanted": "Buscando",
@@ -173,7 +177,7 @@
     "lidarr": {
         "queued": "En cola",
         "wanted": "Buscando",
-        "albums": "Álbumes"
+        "artists": "Artists"
     },
     "adguard": {
         "queries": "Consultas",

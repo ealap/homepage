@@ -206,7 +206,9 @@
     "sonarr": {
         "series": "Σειρές",
         "wanted": "Επιθυμούντε",
-        "queued": "Σε σειρά"
+        "queued": "Σε σειρά",
+        "queue": "Queue",
+        "unknown": "Unknown"
     },
     "downloadstation": {
         "download": "Μεταφόρτωση",
@@ -218,12 +220,14 @@
         "wanted": "Επιθυμούντε",
         "missing": "Απουσιάζει",
         "queued": "Σε σειρά",
-        "movies": "Ταινίες"
+        "movies": "Ταινίες",
+        "queue": "Queue",
+        "unknown": "Unknown"
     },
     "lidarr": {
         "wanted": "Θέλετε",
         "queued": "Στη σειρά",
-        "albums": "Δίσκοι"
+        "artists": "Artists"
     },
     "readarr": {
         "wanted": "Θέλετε",
