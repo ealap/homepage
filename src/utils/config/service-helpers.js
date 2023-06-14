@@ -158,11 +158,20 @@ export async function servicesFromKubernetes() {
         return null;
       });
 
-     const traefikIngressList = await crd.listClusterCustomObject("traefik.containo.us", "v1alpha1", "ingressroutes")
+    const traefikIngressList = await crd.listClusterCustomObject("traefik.io", "v1alpha1", "ingressroutes")
       .then((response) => response.body)
-      .catch((error) => {
-        logger.error("Error getting traefik ingresses: %d %s %s", error.statusCode, error.body, error.response);
-        return null;
+      .catch(async (error) => {
+        logger.error("Error getting traefik ingresses from traefik.io: %d %s %s", error.statusCode, error.body, error.response);
+
+        // Fallback to the old traefik CRD group
+        const fallbackIngressList = await crd.listClusterCustomObject("traefik.containo.us", "v1alpha1", "ingressroutes")
+          .then((response) => response.body)
+          .catch((fallbackError) => {
+            logger.error("Error getting traefik ingresses from traefik.containo.us: %d %s %s", fallbackError.statusCode, fallbackError.body, fallbackError.response);
+            return null;
+          });
+
+        return fallbackIngressList;
       });
 
     if (traefikIngressList && traefikIngressList.items.length > 0) {
@@ -328,16 +337,13 @@ export function cleanServiceGroups(groups) {
   }));
 }
 
-export default async function getServiceWidget(group, service) {
+export async function getServiceItem(group, service) {
   const configuredServices = await servicesFromConfig();
 
   const serviceGroup = configuredServices.find((g) => g.name === group);
   if (serviceGroup) {
     const serviceEntry = serviceGroup.services.find((s) => s.name === service);
-    if (serviceEntry) {
-      const { widget } = serviceEntry;
-      return widget;
-    }
+    if (serviceEntry) return serviceEntry;
   }
 
   const discoveredServices = await servicesFromDocker();
@@ -345,20 +351,24 @@ export default async function getServiceWidget(group, service) {
   const dockerServiceGroup = discoveredServices.find((g) => g.name === group);
   if (dockerServiceGroup) {
     const dockerServiceEntry = dockerServiceGroup.services.find((s) => s.name === service);
-    if (dockerServiceEntry) {
-      const { widget } = dockerServiceEntry;
-      return widget;
-    }
+    if (dockerServiceEntry) return dockerServiceEntry;
   }
 
   const kubernetesServices = await servicesFromKubernetes();
   const kubernetesServiceGroup = kubernetesServices.find((g) => g.name === group);
   if (kubernetesServiceGroup) {
     const kubernetesServiceEntry = kubernetesServiceGroup.services.find((s) => s.name === service);
-    if (kubernetesServiceEntry) {
-      const { widget } = kubernetesServiceEntry;
-      return widget;
-    }
+    if (kubernetesServiceEntry) return kubernetesServiceEntry;
+  }
+
+  return false;
+}
+
+export default async function getServiceWidget(group, service) {
+  const serviceItem = await getServiceItem(group, service);
+  if (serviceItem) {
+    const { widget } = serviceItem;
+    return widget;
   }
 
   return false;

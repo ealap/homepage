@@ -177,7 +177,7 @@
     "lidarr": {
         "queued": "En cola",
         "wanted": "Buscando",
-        "artists": "Artists"
+        "artists": "Artistas"
     },
     "adguard": {
         "queries": "Consultas",
@@ -644,5 +644,10 @@
         "connected": "Conectado",
         "new_devices": "Nuevos dispositivos",
         "down_alerts": "Alertas"
+    },
+    "jdownloader": {
+        "downloadCount": "Queue Count",
+        "downloadQueueSize": "Queue Size",
+        "downloadSpeed": "Download Speed"
     }
 }
