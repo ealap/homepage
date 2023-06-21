@@ -646,8 +646,13 @@
         "down_alerts": "Alertes"
     },
     "jdownloader": {
-        "downloadCount": "Queue Count",
-        "downloadQueueSize": "Queue Size",
-        "downloadSpeed": "Download Speed"
+        "downloadCount": "Total en attente",
+        "downloadSpeed": "Vitesse de téléchargement",
+        "downloadBytesRemaining": "Restant",
+        "downloadTotalBytes": "Taille"
+    },
+    "kavita": {
+        "seriesCount": "Series",
+        "totalFiles": "Files"
     }
 }
