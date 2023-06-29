@@ -31,11 +31,11 @@ body {
 
 .container:nth-child(1) > :nth-child(1) > :nth-child(2) {
   order: 3;
-  padding-right: 1rem;
 }
 
 .container:nth-child(1) > :nth-child(1) > :nth-child(3) {
   order: 2;
+  padding-right: 1rem;
 }
 
 .container:nth-child(1) > :nth-child(1) > :nth-child(4) {
