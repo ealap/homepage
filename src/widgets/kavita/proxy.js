@@ -37,7 +37,7 @@ async function login(widget, service) {
 async function apiCall(widget, endpoint, service) {
   const key = `${sessionTokenCacheKey}.${service}`;
   const headers = {
-    "content-type": "application/json",
+    "Content-Type": "application/json",
     "Authorization": `Bearer ${cache.get(key)}`,
   }
 
