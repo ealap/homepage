@@ -19,6 +19,7 @@ export async function getServerSideProps({ res }) {
 
   res.setHeader("Content-Type", "text/xml");
   res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("Cache-Control", "no-cache");
   res.write(xml);
   res.end();
 
