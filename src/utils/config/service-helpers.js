@@ -7,7 +7,7 @@ import * as shvl from "shvl";
 import { CustomObjectsApi, NetworkingV1Api } from "@kubernetes/client-node";
 
 import createLogger from "utils/logger";
-import checkAndCopyConfig, { substituteEnvironmentVars } from "utils/config/config";
+import checkAndCopyConfig, { CONF_DIR, substituteEnvironmentVars } from "utils/config/config";
 import getDockerArguments from "utils/config/docker";
 import getKubeConfig from "utils/config/kubernetes";
 
@@ -17,7 +17,7 @@ const logger = createLogger("service-helpers");
 export async function servicesFromConfig() {
   checkAndCopyConfig("services.yaml");
 
-  const servicesYaml = path.join(process.cwd(), "config", "services.yaml");
+  const servicesYaml = path.join(CONF_DIR, "services.yaml");
   const rawFileContents = await fs.readFile(servicesYaml, "utf8");
   const fileContents = substituteEnvironmentVars(rawFileContents);
   const services = yaml.load(fileContents);
@@ -51,7 +51,7 @@ export async function servicesFromConfig() {
 export async function servicesFromDocker() {
   checkAndCopyConfig("docker.yaml");
 
-  const dockerYaml = path.join(process.cwd(), "config", "docker.yaml");
+  const dockerYaml = path.join(CONF_DIR, "docker.yaml");
   const rawDockerFileContents = await fs.readFile(dockerYaml, "utf8");
   const dockerFileContents = substituteEnvironmentVars(rawDockerFileContents);
   const servers = yaml.load(dockerFileContents);
@@ -279,6 +279,7 @@ export function cleanServiceGroups(groups) {
           container,
           currency, // coinmarketcap widget
           symbols,
+          slugs,
           defaultinterval,
           site, // unifi widget
           namespace, // kubernetes widget
@@ -308,9 +309,12 @@ export function cleanServiceGroups(groups) {
           service_group: serviceGroup.name,
         };
 
-        if (currency) cleanedService.widget.currency = currency;
-        if (symbols) cleanedService.widget.symbols = symbols;
-        if (defaultinterval) cleanedService.widget.defaultinterval = defaultinterval;
+        if (type === "coinmarketcap") {
+          if (currency) cleanedService.widget.currency = currency;
+          if (symbols) cleanedService.widget.symbols = symbols;
+          if (slugs) cleanedService.widget.slugs = slugs;
+          if (defaultinterval) cleanedService.widget.defaultinterval = defaultinterval;
+        }
 
         if (type === "docker") {
           if (server) cleanedService.widget.server = server;
