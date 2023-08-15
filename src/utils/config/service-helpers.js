@@ -290,6 +290,15 @@ export function cleanServiceGroups(groups) {
           enableNowPlaying,
           volume, // diskstation widget,
           enableQueue, // sonarr/radarr
+          node, // Proxmox
+          snapshotHost, // kopia
+          snapshotPath,
+          userEmail, // azuredevops
+          repositoryId,
+          metric, // glances
+          stream, // mjpeg
+          fit,
+          method, // openmediavault widget
         } = cleanedService.widget;
 
         let fieldsList = fields;
@@ -300,7 +309,7 @@ export function cleanServiceGroups(groups) {
             fieldsList = null;
           }
         }
-        
+
         cleanedService.widget = {
           type,
           fields: fieldsList || null,
@@ -308,6 +317,11 @@ export function cleanServiceGroups(groups) {
           service_name: service.name,
           service_group: serviceGroup.name,
         };
+
+        if (type === "azuredevops") {
+          if (userEmail) cleanedService.widget.userEmail = userEmail;
+          if (repositoryId) cleanedService.widget.repositoryId = repositoryId;
+        }
 
         if (type === "coinmarketcap") {
           if (currency) cleanedService.widget.currency = currency;
@@ -322,6 +336,9 @@ export function cleanServiceGroups(groups) {
         }
         if (type === "unifi") {
           if (site) cleanedService.widget.site = site;
+        }
+        if (type === "proxmox") {
+          if (node) cleanedService.widget.node = node;
         }
         if (type === "kubernetes") {
           if (namespace) cleanedService.widget.namespace = namespace;
@@ -340,6 +357,20 @@ export function cleanServiceGroups(groups) {
         }
         if (["diskstation", "qnap"].includes(type)) {
           if (volume) cleanedService.widget.volume = volume;
+        }
+        if (type === "kopia") {
+          if (snapshotHost) cleanedService.widget.snapshotHost = snapshotHost;
+          if (snapshotPath) cleanedService.widget.snapshotPath = snapshotPath;
+        }
+        if (type === "glances") {
+          if (metric) cleanedService.widget.metric = metric;
+        }
+        if (type === "mjpeg") {
+          if (stream) cleanedService.widget.stream = stream;
+          if (fit) cleanedService.widget.fit = fit;
+        }
+        if (type === "openmediavault") {
+          if (method) cleanedService.widget.method = method;
         }
       }
 
